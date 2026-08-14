@@ -1,0 +1,10 @@
+[
+  { "id": "maroon-brocade", "name": "Maroon Brocade", "file": "fabric-maroon-brocade.jpg" },
+  { "id": "ivory-zari", "name": "Ivory Zari", "file": "fabric-ivory-zari.jpg" },
+  { "id": "emerald-silk", "name": "Emerald Silk", "file": "fabric-emerald-silk.jpg" },
+  { "id": "navy-velvet", "name": "Navy Velvet", "file": "fabric-navy-velvet.jpg" },
+  { "id": "blush-floral", "name": "Blush Floral", "file": "fabric-blush-floral.jpg" },
+  { "id": "black-paisley", "name": "Black Paisley", "file": "fabric-black-paisley.jpg" },
+  { "id": "mustard-silk", "name": "Mustard Silk", "file": "fabric-mustard-silk.jpg" },
+  { "id": "teal-trellis", "name": "Teal Trellis", "file": "fabric-teal-trellis.jpg" }
+]

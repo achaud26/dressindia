@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dressindia — Fabric on Lehenga</title>
+    <meta
+      name="description"
+      content="Upload a fabric, pick a lehenga template, and see how it looks. Compare fabrics side by side."
+    />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="top">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <p class="brand-kicker">Dressindia</p>
+          <h1>See the fabric on the lehenga</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="compare-toggle" role="group" aria-label="How many lehengas to compare">
+          <span>Compare</span>
+          <button type="button" data-slots="1" class="slot-btn">1</button>
+          <button type="button" data-slots="2" class="slot-btn is-on">2</button>
+          <button type="button" data-slots="3" class="slot-btn">3</button>
+        </div>
+        <button type="button" id="saveBtn" class="btn gold">Save preview</button>
+      </div>
+    </header>
+
+    <main class="studio">
+      <aside class="rail">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Your fabrics</h2>
+            <p>Drop photos here. They stay in this browser.</p>
+          </div>
+          <label class="drop" id="dropZone">
+            <input id="fileInput" type="file" accept="image/*" multiple hidden />
+            <span class="drop-title">Upload fabric photos</span>
+            <span class="drop-sub">PNG, JPG, WEBP · several at once</span>
+          </label>
+          <div id="fabricGrid" class="fabric-grid"></div>
+        </section>
+      </aside>
+
+      <section class="stage-wrap">
+        <div id="stage" class="stage"></div>
+
+        <div class="controls">
+          <div class="templates" id="templateRow"></div>
+
+          <div class="sliders">
+            <label>
+              <span>Print size</span>
+              <input id="scale" type="range" min="36" max="160" value="72" />
+            </label>
+            <label>
+              <span>Rotate print</span>
+              <input id="rotation" type="range" min="0" max="180" value="0" />
+            </label>
+            <div class="apply-to">
+              <span>Apply fabric to</span>
+              <div class="pills" id="partPills">
+                <button type="button" data-part="all" class="is-on">Whole lehenga</button>
+                <button type="button" data-part="skirt">Skirt</button>
+                <button type="button" data-part="blouse">Blouse</button>
+                <button type="button" data-part="dupatta">Dupatta</button>
+              </div>
+            </div>
+            <label class="check">
+              <input id="showDupatta" type="checkbox" checked />
+              Show dupatta
+            </label>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <p class="hint">
+      Click a lehenga to select it, then click a fabric. Use 2 or 3 columns to compare. Click the blouse, skirt, or dupatta to paint that piece only.
+    </p>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
