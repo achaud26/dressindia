@@ -1,10 +1,494 @@
 [
-  { "id": "maroon-brocade", "name": "Maroon Brocade", "file": "fabric-maroon-brocade.jpg" },
-  { "id": "ivory-zari", "name": "Ivory Zari", "file": "fabric-ivory-zari.jpg" },
-  { "id": "emerald-silk", "name": "Emerald Silk", "file": "fabric-emerald-silk.jpg" },
-  { "id": "navy-velvet", "name": "Navy Velvet", "file": "fabric-navy-velvet.jpg" },
-  { "id": "blush-floral", "name": "Blush Floral", "file": "fabric-blush-floral.jpg" },
-  { "id": "black-paisley", "name": "Black Paisley", "file": "fabric-black-paisley.jpg" },
-  { "id": "mustard-silk", "name": "Mustard Silk", "file": "fabric-mustard-silk.jpg" },
-  { "id": "teal-trellis", "name": "Teal Trellis", "file": "fabric-teal-trellis.jpg" }
+  {
+    "id": "v001",
+    "name": "Rose",
+    "file": "verified/v001-rose.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v002",
+    "name": "Rose 2",
+    "file": "verified/v002-rose.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v003",
+    "name": "Rose 3",
+    "file": "verified/v003-rose.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v004",
+    "name": "Red",
+    "file": "verified/v004-red.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v005",
+    "name": "Red 2",
+    "file": "verified/v005-red.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v006",
+    "name": "Red 3",
+    "file": "verified/v006-red.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v007",
+    "name": "Red 4",
+    "file": "verified/v007-red.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v008",
+    "name": "Red 5",
+    "file": "verified/v008-red.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v009",
+    "name": "Red 6",
+    "file": "verified/v009-red.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v010",
+    "name": "Red 7",
+    "file": "verified/v010-red.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v011",
+    "name": "Red 8",
+    "file": "verified/v011-red.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v012",
+    "name": "Red 9",
+    "file": "verified/v012-red.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v013",
+    "name": "Red 10",
+    "file": "verified/v013-red.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v014",
+    "name": "Rust",
+    "file": "verified/v014-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v015",
+    "name": "Rust 2",
+    "file": "verified/v015-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v016",
+    "name": "Rust 3",
+    "file": "verified/v016-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v017",
+    "name": "Rust 4",
+    "file": "verified/v017-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v018",
+    "name": "Rust 5",
+    "file": "verified/v018-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v019",
+    "name": "Rust 6",
+    "file": "verified/v019-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v020",
+    "name": "Rust 7",
+    "file": "verified/v020-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v021",
+    "name": "Rust 8",
+    "file": "verified/v021-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v022",
+    "name": "Rust 9",
+    "file": "verified/v022-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v023",
+    "name": "Rust 10",
+    "file": "verified/v023-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v024",
+    "name": "Rust 11",
+    "file": "verified/v024-rust.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v025",
+    "name": "Orange",
+    "file": "verified/v025-orange.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v026",
+    "name": "Orange 2",
+    "file": "verified/v026-orange.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v027",
+    "name": "Orange 3",
+    "file": "verified/v027-orange.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v028",
+    "name": "Orange 4",
+    "file": "verified/v028-orange.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v029",
+    "name": "Peach",
+    "file": "verified/v029-peach.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v030",
+    "name": "Peach 2",
+    "file": "verified/v030-peach.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v031",
+    "name": "Peach 3",
+    "file": "verified/v031-peach.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v032",
+    "name": "Peach 4",
+    "file": "verified/v032-peach.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v033",
+    "name": "Yellow",
+    "file": "verified/v033-yellow.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v034",
+    "name": "Yellow 2",
+    "file": "verified/v034-yellow.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v035",
+    "name": "Yellow 3",
+    "file": "verified/v035-yellow.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v036",
+    "name": "Yellow 4",
+    "file": "verified/v036-yellow.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v037",
+    "name": "Green",
+    "file": "verified/v037-green.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v038",
+    "name": "Emerald",
+    "file": "verified/v038-emerald.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v039",
+    "name": "Emerald 2",
+    "file": "verified/v039-emerald.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v040",
+    "name": "Teal",
+    "file": "verified/v040-teal.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v041",
+    "name": "Teal 2",
+    "file": "verified/v041-teal.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v042",
+    "name": "Teal 3",
+    "file": "verified/v042-teal.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v043",
+    "name": "Teal 4",
+    "file": "verified/v043-teal.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v044",
+    "name": "Teal 5",
+    "file": "verified/v044-teal.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v045",
+    "name": "Teal 6",
+    "file": "verified/v045-teal.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v046",
+    "name": "Teal 7",
+    "file": "verified/v046-teal.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v047",
+    "name": "Teal 8",
+    "file": "verified/v047-teal.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v048",
+    "name": "Teal 9",
+    "file": "verified/v048-teal.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v049",
+    "name": "Teal 10",
+    "file": "verified/v049-teal.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v050",
+    "name": "Cyan",
+    "file": "verified/v050-cyan.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v051",
+    "name": "Cyan 2",
+    "file": "verified/v051-cyan.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v052",
+    "name": "Cyan 3",
+    "file": "verified/v052-cyan.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v053",
+    "name": "Cyan 4",
+    "file": "verified/v053-cyan.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v054",
+    "name": "Cyan 5",
+    "file": "verified/v054-cyan.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v055",
+    "name": "Cyan 6",
+    "file": "verified/v055-cyan.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v056",
+    "name": "Cyan 7",
+    "file": "verified/v056-cyan.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v057",
+    "name": "Cyan 8",
+    "file": "verified/v057-cyan.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v058",
+    "name": "Cyan 9",
+    "file": "verified/v058-cyan.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v059",
+    "name": "Cyan 10",
+    "file": "verified/v059-cyan.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v060",
+    "name": "Sky",
+    "file": "verified/v060-sky.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v061",
+    "name": "Sky 2",
+    "file": "verified/v061-sky.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v062",
+    "name": "Sky 3",
+    "file": "verified/v062-sky.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v063",
+    "name": "Magenta",
+    "file": "verified/v063-magenta.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v064",
+    "name": "Magenta 2",
+    "file": "verified/v064-magenta.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v065",
+    "name": "Magenta 3",
+    "file": "verified/v065-magenta.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v066",
+    "name": "Magenta 4",
+    "file": "verified/v066-magenta.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v067",
+    "name": "Magenta 5",
+    "file": "verified/v067-magenta.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v068",
+    "name": "Magenta 6",
+    "file": "verified/v068-magenta.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v069",
+    "name": "Magenta 7",
+    "file": "verified/v069-magenta.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v070",
+    "name": "Magenta 8",
+    "file": "verified/v070-magenta.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v071",
+    "name": "Pink",
+    "file": "verified/v071-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v072",
+    "name": "Pink 2",
+    "file": "verified/v072-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v073",
+    "name": "Pink 3",
+    "file": "verified/v073-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v074",
+    "name": "Pink 4",
+    "file": "verified/v074-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v075",
+    "name": "Pink 5",
+    "file": "verified/v075-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v076",
+    "name": "Pink 6",
+    "file": "verified/v076-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v077",
+    "name": "Pink 7",
+    "file": "verified/v077-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v078",
+    "name": "Pink 8",
+    "file": "verified/v078-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v079",
+    "name": "Pink 9",
+    "file": "verified/v079-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v080",
+    "name": "Pink 10",
+    "file": "verified/v080-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v081",
+    "name": "Pink 11",
+    "file": "verified/v081-pink.jpg",
+    "group": "verified"
+  },
+  {
+    "id": "v082",
+    "name": "Pink 12",
+    "file": "verified/v082-pink.jpg",
+    "group": "verified"
+  }
 ]

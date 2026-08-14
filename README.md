@@ -1,41 +1,27 @@
-# Dressindia — fabric on lehenga
+# Dressindia — fabric on a real lehenga
 
-Upload a fabric photo, pick a lehenga shape, and see how it sits on the skirt, blouse, and dupatta. Open two or three lehengas at once to compare.
+Map a cloth onto a **photograph** of a lehenga (not a drawing). Folds and shadows from the photo stay, via multiply blending.
 
-**Use it here after GitHub Pages is on:** `https://<your-username>.github.io/dressindia/`
+**Live:** [https://achaud26.github.io/dressindia/](https://achaud26.github.io/dressindia/)  
+**Repo:** [https://github.com/achaud26/dressindia](https://github.com/achaud26/dressindia)
 
 ## How to use
 
-1. Click a lehenga template (classic flare, A-line, mermaid, bridal circle).
-2. Upload your fabric photos, or click a sample.
-3. Turn **Compare** to 2 or 3 to try fabrics side by side.
-4. Click the skirt, blouse, or dupatta if you want a different fabric on that piece.
-5. Drag **Print size** if the motif looks too big or too small.
-6. **Save preview** downloads a PNG of the selected lehenga.
+1. Open **Verified** — your fabrics, split from the stack photos and sorted by color.
+2. Pick a lehenga photo (studio flare, or ITRH Zarika / Rangmala / Rhea / Neelratna).
+3. Click a fabric. Use **Compare** 2 or 3 to try colors side by side.
+4. **Print size** changes how big the motif tiles.
+5. **Save preview** downloads a PNG.
 
-Uploads stay in your own browser. They are not sent to a server.
+Extra uploads stay in this browser only.
 
-## Put your fabrics in the repo (so everyone sees them)
+## Templates
 
-1. Add images to `assets/fabrics/`.
-2. List them in `assets/fabrics.json`:
-
-```json
-{ "id": "my-silk", "name": "My Silk", "file": "my-silk.jpg" }
-```
-
-Square photos tile best. A close-up of the cloth, no mannequin, works better than a full outfit shot.
+- Studio flare — your full-body photo on black
+- Zarika, Rangmala, Rhea, Neelratna — real photos from [ITRH lehenga collection](https://international.itrh.co/collections/lehenga) used as on-site style previews
 
 ## Run locally
-
-Open the folder with any static server:
 
 ```bash
 npx --yes serve .
 ```
-
-Then visit the URL it prints. Opening `index.html` as a file can block the sample fabrics.
-
-## GitHub Pages
-
-This is a static site (HTML / CSS / JS). In the repo: **Settings → Pages → Deploy from a branch → `main` / root**.

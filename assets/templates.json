@@ -1,0 +1,52 @@
+[
+  {
+    "id": "studio",
+    "name": "Studio flare",
+    "photo": "assets/templates/lehenga-studio.png",
+    "mask": "assets/templates/lehenga-studio-skirt.png",
+    "blouse": "assets/templates/lehenga-studio-blouse.png",
+    "light": "assets/templates/lehenga-studio-light.png",
+    "overlay": "assets/templates/lehenga-studio-overlay.png",
+    "credit": ""
+  },
+  {
+    "id": "itrh-zarika",
+    "name": "Zarika flare",
+    "photo": "assets/templates/itrh-zarika.jpg",
+    "mask": "assets/templates/itrh-zarika-skirt.png",
+    "blouse": "assets/templates/itrh-zarika-blouse.png",
+    "light": "assets/templates/itrh-zarika-light.png",
+    "overlay": "assets/templates/itrh-zarika-overlay.png",
+    "credit": "ITRH"
+  },
+  {
+    "id": "itrh-rangmala",
+    "name": "Rangmala flare",
+    "photo": "assets/templates/itrh-rangmala.jpg",
+    "mask": "assets/templates/itrh-rangmala-skirt.png",
+    "blouse": "assets/templates/itrh-rangmala-blouse.png",
+    "light": "assets/templates/itrh-rangmala-light.png",
+    "overlay": "assets/templates/itrh-rangmala-overlay.png",
+    "credit": "ITRH"
+  },
+  {
+    "id": "itrh-rhea",
+    "name": "Rhea flare",
+    "photo": "assets/templates/itrh-rhea.jpg",
+    "mask": "assets/templates/itrh-rhea-skirt.png",
+    "blouse": "assets/templates/itrh-rhea-blouse.png",
+    "light": "assets/templates/itrh-rhea-light.png",
+    "overlay": "assets/templates/itrh-rhea-overlay.png",
+    "credit": "ITRH"
+  },
+  {
+    "id": "itrh-neelratna",
+    "name": "Neelratna panel",
+    "photo": "assets/templates/itrh-neelratna.jpg",
+    "mask": "assets/templates/itrh-neelratna-skirt.png",
+    "blouse": "assets/templates/itrh-neelratna-blouse.png",
+    "light": "assets/templates/itrh-neelratna-light.png",
+    "overlay": "assets/templates/itrh-neelratna-overlay.png",
+    "credit": "ITRH"
+  }
+]

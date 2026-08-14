@@ -1,22 +1,18 @@
-import { TEMPLATES, buildLehengaSvg, templateIcon } from "./templates.js";
+import { loadTemplates, paintLehenga } from "./templates.js";
 
 const DB_NAME = "dressindia";
 const STORE = "uploads";
 
 const state = {
-  template: "classic",
-  scale: 72,
+  templates: [],
+  template: "studio",
+  scale: 88,
   rotation: 0,
   part: "all",
   slots: 2,
   active: 0,
-  showDupatta: true,
   fabrics: [],
-  picks: [
-    { skirt: "maroon-brocade", blouse: "maroon-brocade", dupatta: "ivory-zari" },
-    { skirt: "ivory-zari", blouse: "ivory-zari", dupatta: "maroon-brocade" },
-    { skirt: "emerald-silk", blouse: "emerald-silk", dupatta: "mustard-silk" },
-  ],
+  picks: [{ skirt: "", blouse: "" }, { skirt: "", blouse: "" }, { skirt: "", blouse: "" }],
 };
 
 const $ = (id) => document.getElementById(id);
@@ -66,7 +62,7 @@ function fabricUrl(id) {
 }
 
 function fabricName(id) {
-  return fabricById(id)?.name || "No fabric";
+  return fabricById(id)?.name || "Pick a fabric";
 }
 
 function usedIds() {
@@ -74,65 +70,97 @@ function usedIds() {
   state.picks.slice(0, state.slots).forEach((p) => {
     ids.add(p.skirt);
     ids.add(p.blouse);
-    ids.add(p.dupatta);
   });
   return ids;
 }
 
+function family(name) {
+  return (name || "").replace(/ \d+$/, "");
+}
+
 function renderFabrics() {
   const used = usedIds();
-  $("fabricGrid").innerHTML = state.fabrics
+  const verified = state.fabrics.filter((f) => f.group === "verified");
+  const uploads = state.fabrics.filter((f) => f.uploaded);
+  const swatch = (f) => `
+    <div class="swatch ${used.has(f.id) ? "is-used" : ""}" data-fabric="${f.id}" role="button" tabindex="0">
+      <img src="${f.url}" alt="${f.name}" />
+      <span>${f.name}</span>
+      ${f.uploaded ? `<button class="x" data-del="${f.id}" type="button" aria-label="Remove">×</button>` : ""}
+    </div>`;
+
+  let html = "";
+  if (verified.length) {
+    html += `<p class="group-label">Verified · ${verified.length} · color order</p>`;
+    let last = "";
+    for (const f of verified) {
+      const fam = family(f.name);
+      if (fam !== last) {
+        html += `<p class="hue-label">${fam}</p>`;
+        last = fam;
+      }
+      html += swatch(f);
+    }
+  }
+  if (uploads.length) {
+    html += `<p class="group-label">Your uploads</p>`;
+    html += uploads.map(swatch).join("");
+  }
+  $("fabricGrid").innerHTML = html;
+}
+
+function currentTemplate() {
+  return state.templates.find((t) => t.id === state.template) || state.templates[0];
+}
+
+function renderTemplates() {
+  $("templateRow").innerHTML = state.templates
     .map(
-      (f) => `
-      <div class="swatch ${used.has(f.id) ? "is-used" : ""}" data-fabric="${f.id}" role="button" tabindex="0">
-        <img src="${f.url}" alt="${f.name}" />
-        <span>${f.name}</span>
-        ${f.uploaded ? `<button class="x" data-del="${f.id}" type="button" aria-label="Remove">×</button>` : ""}
-      </div>`
+      (t) => `
+      <button class="tpl ${state.template === t.id ? "is-on" : ""}" data-template="${t.id}" type="button">
+        <img src="${t.photo}" alt="" />
+        <b>${t.name}</b>
+        ${t.credit ? `<i>${t.credit}</i>` : ""}
+      </button>`
     )
     .join("");
 }
 
-function renderTemplates() {
-  $("templateRow").innerHTML = TEMPLATES.map(
-    (t) => `
-    <button class="tpl ${state.template === t.id ? "is-on" : ""}" data-template="${t.id}" type="button">
-      ${templateIcon(t.id)}
-      <b>${t.name}</b>
-    </button>`
-  ).join("");
-}
-
-function renderStage() {
+async function renderStage() {
   $("stage").style.setProperty("--cols", state.slots);
+  const tpl = currentTemplate();
   $("stage").innerHTML = state.picks
     .slice(0, state.slots)
-    .map((pick, i) => {
-      const svg = buildLehengaSvg({
-        uid: `s${i}`,
-        template: state.template,
-        skirt: fabricUrl(pick.skirt),
-        blouse: fabricUrl(pick.blouse),
-        dupatta: fabricUrl(pick.dupatta),
-        scale: state.scale,
-        rotation: state.rotation,
-        showDupatta: state.showDupatta,
-      });
-      return `<article class="slot ${i === state.active ? "is-focus" : ""}" data-slot="${i}">
-        ${svg}
+    .map(
+      (pick, i) => `
+      <article class="slot ${i === state.active ? "is-focus" : ""}" data-slot="${i}">
+        <canvas id="cv-${i}"></canvas>
         <div class="slot-label">
-          <span>Lehenga ${i + 1}</span>
+          <span>${tpl?.name || "Lehenga"} ${i + 1}</span>
           <strong>${fabricName(pick.skirt)}</strong>
         </div>
-      </article>`;
-    })
+      </article>`
+    )
     .join("");
+
+  await Promise.all(
+    state.picks.slice(0, state.slots).map((pick, i) => {
+      const canvas = document.getElementById(`cv-${i}`);
+      if (!canvas || !tpl) return Promise.resolve();
+      return paintLehenga(canvas, tpl, {
+        skirt: fabricUrl(pick.skirt),
+        blouse: fabricUrl(pick.blouse || pick.skirt),
+        scale: state.scale,
+        rotation: state.rotation,
+        applyBlouse: state.part !== "skirt",
+      }).catch((err) => console.warn(err));
+    })
+  );
 }
 
-function render() {
+function renderChrome() {
   renderFabrics();
   renderTemplates();
-  renderStage();
   document.querySelectorAll(".slot-btn").forEach((b) => {
     b.classList.toggle("is-on", Number(b.dataset.slots) === state.slots);
   });
@@ -141,14 +169,18 @@ function render() {
   });
 }
 
+async function render() {
+  renderChrome();
+  await renderStage();
+}
+
 function applyFabric(id) {
   const pick = state.picks[state.active];
-  if (state.part === "all") {
+  if (state.part === "blouse") pick.blouse = id;
+  else if (state.part === "skirt") pick.skirt = id;
+  else {
     pick.skirt = id;
     pick.blouse = id;
-    pick.dupatta = id;
-  } else {
-    pick[state.part] = id;
   }
   render();
 }
@@ -179,30 +211,42 @@ async function addFiles(fileList) {
 }
 
 async function boot() {
-  const res = await fetch("assets/fabrics.json");
-  const samples = await res.json();
+  const [samples, templates] = await Promise.all([
+    fetch("assets/fabrics.json").then((r) => r.json()),
+    loadTemplates(),
+  ]);
+  state.templates = templates;
+  state.template = templates[0]?.id || "studio";
   state.fabrics = samples.map((s) => ({
     ...s,
     url: `assets/fabrics/${s.file}`,
     uploaded: false,
   }));
+  const verified = state.fabrics.filter((f) => f.group === "verified");
+  if (verified[0]) {
+    state.picks[0] = { skirt: verified[0].id, blouse: verified[0].id };
+  }
+  if (verified[8]) {
+    state.picks[1] = { skirt: verified[8].id, blouse: verified[8].id };
+  } else if (verified[1]) {
+    state.picks[1] = { skirt: verified[1].id, blouse: verified[1].id };
+  }
+  if (verified[16]) {
+    state.picks[2] = { skirt: verified[16].id, blouse: verified[16].id };
+  }
   try {
     const uploads = await allUploads();
     state.fabrics.push(...uploads);
   } catch {
     /* private mode */
   }
-  render();
+  await render();
 }
 
 $("stage").addEventListener("click", (e) => {
   const slot = e.target.closest("[data-slot]");
   if (!slot) return;
   state.active = Number(slot.dataset.slot);
-  const part = e.target.closest("[data-part]")?.dataset.part;
-  if (part && part !== "arm") {
-    state.part = part;
-  }
   render();
 });
 
@@ -239,20 +283,19 @@ $("partPills").addEventListener("click", (e) => {
   const btn = e.target.closest("[data-part]");
   if (!btn) return;
   state.part = btn.dataset.part;
-  render();
+  renderChrome();
 });
 
+let scaleTimer;
 $("scale").addEventListener("input", (e) => {
   state.scale = Number(e.target.value);
-  renderStage();
+  clearTimeout(scaleTimer);
+  scaleTimer = setTimeout(() => renderStage(), 40);
 });
 $("rotation").addEventListener("input", (e) => {
   state.rotation = Number(e.target.value);
-  renderStage();
-});
-$("showDupatta").addEventListener("change", (e) => {
-  state.showDupatta = e.target.checked;
-  renderStage();
+  clearTimeout(scaleTimer);
+  scaleTimer = setTimeout(() => renderStage(), 40);
 });
 
 const drop = $("dropZone");
@@ -272,28 +315,13 @@ input.addEventListener("change", () => addFiles(input.files));
 });
 drop.addEventListener("drop", (e) => addFiles(e.dataTransfer.files));
 
-$("saveBtn").addEventListener("click", async () => {
-  const slot = document.querySelector(".slot.is-focus svg") || document.querySelector(".slot svg");
-  if (!slot) return;
-  const xml = new XMLSerializer().serializeToString(slot);
-  const blob = new Blob([xml], { type: "image/svg+xml;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const img = new Image();
-  img.onload = () => {
-    const canvas = document.createElement("canvas");
-    canvas.width = 900;
-    canvas.height = 1935;
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#1a1210";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    const a = document.createElement("a");
-    a.href = canvas.toDataURL("image/png");
-    a.download = `dressindia-lehenga.png`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-  img.src = url;
+$("saveBtn").addEventListener("click", () => {
+  const canvas = document.querySelector(".slot.is-focus canvas") || document.querySelector(".slot canvas");
+  if (!canvas) return;
+  const a = document.createElement("a");
+  a.href = canvas.toDataURL("image/png");
+  a.download = "dressindia-lehenga.png";
+  a.click();
 });
 
 boot();
