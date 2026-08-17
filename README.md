@@ -1,16 +1,16 @@
 # Dressindia — fabric on a real lehenga
 
-Map a cloth onto a **photograph** of a lehenga (not a drawing). Folds and shadows from the photo stay, via multiply blending.
+**AI photo** generates a photoreal fashion shot of the lehenga in your fabric (GPT Image / Flux), like ChatGPT image generation. **Fast overlay** maps the cloth onto the real photo instantly.
 
 **Live:** [https://achaud26.github.io/dressindia/](https://achaud26.github.io/dressindia/)  
 **Repo:** [https://github.com/achaud26/dressindia](https://github.com/achaud26/dressindia)
 
 ## How to use
 
-1. Open **Verified** — your fabrics, split from the stack photos and sorted by color.
-2. Pick a lehenga photo (studio flare, or ITRH Zarika / Rangmala / Rhea / Neelratna).
-3. Click a fabric. Use **Compare** 2 or 3 to try colors side by side.
-4. **Print size** changes how big the motif tiles.
+1. Leave **AI photo** on. Click a verified fabric. Wait 15–30 seconds for a photoreal generate.
+2. Pick a lehenga (studio flare, or ITRH Zarika / Rangmala / Rhea / Neelratna).
+3. Use **Compare** 2 or 3. **Generate again** if you want a new take.
+4. **Fast overlay** is instant tiling on the photo (print size / rotate).
 5. **Save preview** downloads a PNG.
 
 Extra uploads stay in this browser only.

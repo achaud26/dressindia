@@ -29,12 +29,17 @@
         </div>
       </div>
       <div class="top-actions">
+        <div class="pills" id="modeToggle" role="group" aria-label="Preview mode">
+          <button type="button" data-mode="ai" class="is-on">AI photo</button>
+          <button type="button" data-mode="overlay">Fast overlay</button>
+        </div>
         <div class="compare-toggle" role="group" aria-label="How many lehengas to compare">
           <span>Compare</span>
           <button type="button" data-slots="1" class="slot-btn">1</button>
           <button type="button" data-slots="2" class="slot-btn is-on">2</button>
           <button type="button" data-slots="3" class="slot-btn">3</button>
         </div>
+        <button type="button" id="regenBtn" class="btn">Generate again</button>
         <button type="button" id="saveBtn" class="btn gold">Save preview</button>
       </div>
     </header>
@@ -84,9 +89,11 @@
     </main>
 
     <p class="hint">
-      Real lehenga photos — fabric tiles onto the skirt and keeps the photo’s folds. Extra looks from
+      <strong>AI photo</strong> asks an image model (GPT Image) to generate a photoreal shot of this
+      woman in your cloth — same idea as ChatGPT images, about 15–30 seconds. Overlay is instant.
+      Looks from
       <a href="https://international.itrh.co/collections/lehenga" target="_blank" rel="noreferrer">ITRH</a>
-      are style templates. Click a column, then a verified fabric to compare.
+      are style templates.
     </p>
 
     <script type="module" src="js/app.js"></script>

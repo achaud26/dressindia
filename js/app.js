@@ -1,7 +1,10 @@
 import { loadTemplates, paintLehenga } from "./templates.js";
+import { generateAiPhoto } from "./ai.js";
 
 const DB_NAME = "dressindia";
 const STORE = "uploads";
+const AI_DB = "dressindia-ai";
+const AI_STORE = "photos";
 
 const state = {
   templates: [],
@@ -11,23 +14,32 @@ const state = {
   part: "all",
   slots: 2,
   active: 0,
+  mode: "ai",
   fabrics: [],
   picks: [{ skirt: "", blouse: "" }, { skirt: "", blouse: "" }, { skirt: "", blouse: "" }],
+  aiUrls: {},
+  aiBusy: {},
 };
 
 const $ = (id) => document.getElementById(id);
+const memoryAi = new Map();
+let aiChain = Promise.resolve();
 
-function openDb() {
+function openDb(name, store, version = 1) {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = () => req.result.createObjectStore(STORE, { keyPath: "id" });
+    const req = indexedDB.open(name, version);
+    req.onupgradeneeded = () => {
+      if (!req.result.objectStoreNames.contains(store)) {
+        req.result.createObjectStore(store, { keyPath: "id" });
+      }
+    };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
   });
 }
 
 async function allUploads() {
-  const db = await openDb();
+  const db = await openDb(DB_NAME, STORE);
   return new Promise((resolve, reject) => {
     const req = db.transaction(STORE, "readonly").objectStore(STORE).getAll();
     req.onsuccess = () => resolve(req.result || []);
@@ -36,7 +48,7 @@ async function allUploads() {
 }
 
 async function saveUpload(item) {
-  const db = await openDb();
+  const db = await openDb(DB_NAME, STORE);
   return new Promise((resolve, reject) => {
     const req = db.transaction(STORE, "readwrite").objectStore(STORE).put(item);
     req.onsuccess = () => resolve();
@@ -45,12 +57,49 @@ async function saveUpload(item) {
 }
 
 async function deleteUpload(id) {
-  const db = await openDb();
+  const db = await openDb(DB_NAME, STORE);
   return new Promise((resolve, reject) => {
     const req = db.transaction(STORE, "readwrite").objectStore(STORE).delete(id);
     req.onsuccess = () => resolve();
     req.onerror = () => reject(req.error);
   });
+}
+
+function aiKey(templateId, fabricId, part) {
+  return `${templateId}|${fabricId}|${part}`;
+}
+
+async function readAiCache(id) {
+  if (memoryAi.has(id)) return memoryAi.get(id);
+  try {
+    const db = await openDb(AI_DB, AI_STORE);
+    const row = await new Promise((resolve, reject) => {
+      const req = db.transaction(AI_STORE, "readonly").objectStore(AI_STORE).get(id);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+    if (row?.url) {
+      memoryAi.set(id, row.url);
+      return row.url;
+    }
+  } catch {
+    /* private mode */
+  }
+  return "";
+}
+
+async function writeAiCache(id, url) {
+  memoryAi.set(id, url);
+  try {
+    const db = await openDb(AI_DB, AI_STORE);
+    await new Promise((resolve, reject) => {
+      const req = db.transaction(AI_STORE, "readwrite").objectStore(AI_STORE).put({ id, url });
+      req.onsuccess = () => resolve();
+      req.onerror = () => reject(req.error);
+    });
+  } catch {
+    /* ignore */
+  }
 }
 
 function fabricById(id) {
@@ -126,21 +175,85 @@ function renderTemplates() {
     .join("");
 }
 
+function queueAi(fn) {
+  const run = aiChain.then(fn, fn);
+  aiChain = run.catch(() => {});
+  return run;
+}
+
+async function ensureAiPhoto(slotIndex) {
+  const pick = state.picks[slotIndex];
+  const tpl = currentTemplate();
+  const fabricId = pick?.skirt;
+  if (!tpl || !fabricId) return;
+  const key = aiKey(tpl.id, fabricId, state.part);
+  const cached = await readAiCache(key);
+  if (cached) {
+    state.aiUrls[key] = cached;
+    const img = document.getElementById(`ai-${slotIndex}`);
+    if (img) {
+      img.src = cached;
+      img.hidden = false;
+    }
+    const wait = document.getElementById(`wait-${slotIndex}`);
+    if (wait) wait.hidden = true;
+    return;
+  }
+
+  state.aiBusy[key] = true;
+  const wait = document.getElementById(`wait-${slotIndex}`);
+  if (wait) wait.hidden = false;
+
+  await queueAi(async () => {
+    if (state.aiUrls[key] || memoryAi.has(key)) return;
+    try {
+      const url = await generateAiPhoto({
+        templatePhoto: tpl.photo,
+        fabricUrl: fabricUrl(fabricId),
+        fabricName: fabricName(fabricId),
+        templateName: tpl.name,
+        applyBlouse: state.part !== "skirt",
+      });
+      await writeAiCache(key, url);
+      state.aiUrls[key] = url;
+      const img = document.getElementById(`ai-${slotIndex}`);
+      if (img && state.template === tpl.id && state.picks[slotIndex]?.skirt === fabricId) {
+        img.src = url;
+        img.hidden = false;
+      }
+    } catch (err) {
+      console.warn(err);
+      if (wait) wait.textContent = "AI busy — fabric overlay is showing. Try Generate again.";
+    } finally {
+      state.aiBusy[key] = false;
+      const w = document.getElementById(`wait-${slotIndex}`);
+      if (w && state.aiUrls[key]) w.hidden = true;
+    }
+  });
+}
+
 async function renderStage() {
   $("stage").style.setProperty("--cols", state.slots);
   const tpl = currentTemplate();
+  const ai = state.mode === "ai";
   $("stage").innerHTML = state.picks
     .slice(0, state.slots)
-    .map(
-      (pick, i) => `
+    .map((pick, i) => {
+      const key = aiKey(tpl?.id || "", pick.skirt, state.part);
+      const url = state.aiUrls[key] || memoryAi.get(key) || "";
+      return `
       <article class="slot ${i === state.active ? "is-focus" : ""}" data-slot="${i}">
         <canvas id="cv-${i}"></canvas>
+        <img class="ai-shot" id="ai-${i}" alt="AI lehenga photo" ${url ? `src="${url}"` : "hidden"} />
+        <div class="ai-wait" id="wait-${i}" ${ai && pick.skirt && !url ? "" : "hidden"}>
+          Generating photoreal photo…
+        </div>
         <div class="slot-label">
-          <span>${tpl?.name || "Lehenga"} ${i + 1}</span>
+          <span>${tpl?.name || "Lehenga"} ${i + 1}${ai ? " · AI" : ""}</span>
           <strong>${fabricName(pick.skirt)}</strong>
         </div>
-      </article>`
-    )
+      </article>`;
+    })
     .join("");
 
   await Promise.all(
@@ -156,6 +269,12 @@ async function renderStage() {
       }).catch((err) => console.warn(err));
     })
   );
+
+  if (ai) {
+    state.picks.slice(0, state.slots).forEach((_, i) => {
+      ensureAiPhoto(i);
+    });
+  }
 }
 
 function renderChrome() {
@@ -167,6 +286,10 @@ function renderChrome() {
   document.querySelectorAll("#partPills button").forEach((b) => {
     b.classList.toggle("is-on", b.dataset.part === state.part);
   });
+  document.querySelectorAll("[data-mode]").forEach((b) => {
+    b.classList.toggle("is-on", b.dataset.mode === state.mode);
+  });
+  document.body.classList.toggle("is-ai", state.mode === "ai");
 }
 
 async function render() {
@@ -247,7 +370,10 @@ $("stage").addEventListener("click", (e) => {
   const slot = e.target.closest("[data-slot]");
   if (!slot) return;
   state.active = Number(slot.dataset.slot);
-  render();
+  renderChrome();
+  document.querySelectorAll(".slot").forEach((el, i) => {
+    el.classList.toggle("is-focus", i === state.active);
+  });
 });
 
 $("fabricGrid").addEventListener("click", async (e) => {
@@ -279,21 +405,47 @@ document.querySelector(".compare-toggle").addEventListener("click", (e) => {
   render();
 });
 
+$("modeToggle").addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-mode]");
+  if (!btn) return;
+  state.mode = btn.dataset.mode;
+  render();
+});
+
+$("regenBtn").addEventListener("click", async () => {
+  const tpl = currentTemplate();
+  const pick = state.picks[state.active];
+  if (!tpl || !pick.skirt) return;
+  const key = aiKey(tpl.id, pick.skirt, state.part);
+  memoryAi.delete(key);
+  delete state.aiUrls[key];
+  try {
+    const db = await openDb(AI_DB, AI_STORE);
+    db.transaction(AI_STORE, "readwrite").objectStore(AI_STORE).delete(key);
+  } catch {
+    /* ignore */
+  }
+  state.mode = "ai";
+  await render();
+});
+
 $("partPills").addEventListener("click", (e) => {
   const btn = e.target.closest("[data-part]");
   if (!btn) return;
   state.part = btn.dataset.part;
-  renderChrome();
+  render();
 });
 
 let scaleTimer;
 $("scale").addEventListener("input", (e) => {
   state.scale = Number(e.target.value);
+  if (state.mode === "ai") return;
   clearTimeout(scaleTimer);
   scaleTimer = setTimeout(() => renderStage(), 40);
 });
 $("rotation").addEventListener("input", (e) => {
   state.rotation = Number(e.target.value);
+  if (state.mode === "ai") return;
   clearTimeout(scaleTimer);
   scaleTimer = setTimeout(() => renderStage(), 40);
 });
@@ -316,6 +468,14 @@ input.addEventListener("change", () => addFiles(input.files));
 drop.addEventListener("drop", (e) => addFiles(e.dataTransfer.files));
 
 $("saveBtn").addEventListener("click", () => {
+  const img = document.querySelector(".slot.is-focus .ai-shot:not([hidden])");
+  if (img?.src) {
+    const a = document.createElement("a");
+    a.href = img.src;
+    a.download = "dressindia-ai-lehenga.png";
+    a.click();
+    return;
+  }
   const canvas = document.querySelector(".slot.is-focus canvas") || document.querySelector(".slot canvas");
   if (!canvas) return;
   const a = document.createElement("a");

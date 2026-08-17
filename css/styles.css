@@ -211,12 +211,37 @@ p { margin: 0; }
   cursor: pointer;
 }
 .slot.is-focus { box-shadow: inset 0 0 0 2px var(--gold), var(--shadow); }
-.slot canvas {
+.slot canvas,
+.slot .ai-shot {
   width: 100%;
   height: 620px;
   object-fit: contain;
   background: #0a0706;
 }
+.slot .ai-shot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 620px;
+  z-index: 1;
+}
+.slot .ai-wait {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 56px;
+  z-index: 2;
+  padding: 10px 12px;
+  background: rgba(12, 8, 6, 0.78);
+  border: 1px solid var(--line);
+  color: var(--gold-2);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+body.is-ai .overlay-only { opacity: 0.45; }
+body.is-ai .sliders label:has(#scale),
+body.is-ai .sliders label:has(#rotation) { opacity: 0.4; pointer-events: none; }
 .slot svg { display: none; }
 .slot-label {
   display: flex;
